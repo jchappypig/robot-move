@@ -44,66 +44,114 @@ describe Robot do
 	end
 
 	describe '#move' do
-		context 'when faces south' do
-			it 'moves down one' do
-				robot.place(2, 5, Orientation::SOUTH)
+		context 'when placed' do
+			context 'when faces south' do
+				it 'moves down one' do
+					robot.place(2, 5, Orientation::SOUTH)
 
-				expect{robot.move}.to change{robot.y}.by(-1)
+					expect{robot.move}.to change{robot.y}.by(-1)
+				end
+			end
+
+			context 'when faces north' do
+				it 'moves up one' do
+					robot.place(6, 4, Orientation::NORTH)
+
+					expect{robot.move}.to change{robot.y}.by(1)
+				end
+			end
+
+			context 'when faces east' do
+				it 'moves up one' do
+					robot.place(3, 8, Orientation::EAST)
+
+					expect{robot.move}.to change{robot.x}.by(1)
+				end
+			end
+
+			context 'when faces west' do
+				it 'moves up one' do
+					robot.place(9, 1, Orientation::WEST)
+
+					expect{robot.move}.to change{robot.x}.by(-1)
+				end
 			end
 		end
 
-		context 'when faces north' do
-			it 'moves up one' do
-				robot.place(6, 4, Orientation::NORTH)
+		context 'when not placed yet' do
+			it 'does not move x' do
+				expect{robot.move}.not_to change{robot.x}
+			end
 
-				expect{robot.move}.to change{robot.y}.by(1)
+			it 'does not move y' do
+				expect{robot.move}.not_to change{robot.y}
 			end
 		end
 
-		context 'when faces east' do
-			it 'moves up one' do
-				robot.place(3, 8, Orientation::EAST)
-
-				expect{robot.move}.to change{robot.x}.by(1)
-			end
-		end
-
-		context 'when faces west' do
-			it 'moves up one' do
-				robot.place(9, 1, Orientation::WEST)
-
-				expect{robot.move}.to change{robot.x}.by(-1)
-			end
-		end
 	end
 
 	describe '#rotate' do
-		before do
-			robot.place(4, 6, Orientation::NORTH)
+		context 'when placed' do
+			before do
+				robot.place(4, 6, Orientation::NORTH)
+			end
+
+			it 'calculates new orientation using Orientation' do
+				expect(Orientation).to receive(:rotate)
+
+				robot.rotate(:right)
+			end
+
+			it 'changes orientation of robot' do
+				allow(Orientation).to receive(:rotate).and_return(Orientation::WEST)
+
+				robot.rotate(:left)
+
+				expect(robot.orientation).to eq Orientation::WEST
+			end
 		end
 
-		it 'calculates new orientation using Orientation' do
-			expect(Orientation).to receive(:rotate)
+		context 'when not placed yet' do
+			it 'does not change orientation of robot' do
+				expect(Orientation).not_to receive(:rotate)
 
-			robot.rotate(:right)
-		end
-
-		it 'changes orientation of robot' do
-			allow(Orientation).to receive(:rotate).and_return(Orientation::WEST)
-
-			robot.rotate(:left)
-
-			expect(robot.orientation).to eq Orientation::WEST
+				robot.rotate(:right)
+			end
 		end
 	end
 
 	describe '#status' do
-		it 'returns status' do
-			robot.x = 1
-			robot.y = 2
-			robot.orientation = Orientation::EAST
+		context 'when placed' do
+			it 'returns status with location and orientation' do
+				robot.place(1, 2, Orientation::EAST)
 
-			expect(robot.status).to eq('1,2,EAST')
+				expect(robot.status).to eq('1,2,EAST')
+			end
+		end
+
+		context 'when not placed yet' do
+			it 'returns status that robot not placed' do
+				expect(robot.status).to eq('Robot has not been placed')
+			end
+		end
+	end
+
+	describe 'placed?' do
+		context 'when has not been placed' do
+			it 'returns false' do
+				robot = Robot.new
+
+				expect(robot.placed?).to be_falsey
+			end
+		end
+
+		context 'when has been placed' do
+			it 'returns true' do
+				robot = Robot.new
+				robot.place(3, 4, 'WEST')
+
+				expect(robot.placed?).to be_truthy
+			end
 		end
 	end
 end
