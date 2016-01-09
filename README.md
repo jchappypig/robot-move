@@ -42,4 +42,14 @@ ruby main.rb
 - Please **PLACE** robot first, or else all other commands will be ignore, except **EXIT**
 - Cannot **PLACE**/**MOVE** robot out of grid. Any move that would cause the robot to out of grid will be ignored.
 - The origin **(0,0)** can be considered to be the **SOUTH WEST** most corner.
- 
+
+###### Run test
+
+1. install rspec gem
+```
+bundle install
+```
+2. run spec tests
+```
+rspec spec
+```
