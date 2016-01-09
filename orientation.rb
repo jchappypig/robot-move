@@ -11,10 +11,8 @@ class Orientation
 			lookup(current_orientation[direction])
 		end
 
-		private
-
 		def lookup(name)
-			ALL.find { |orientation| orientation[:name] == name }
+			ALL.find { |orientation| orientation[:name] == name.upcase }
 		end
 	end
 end

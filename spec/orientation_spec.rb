@@ -23,4 +23,22 @@ describe Orientation do
 			end
 		end
 	end
+
+	describe '.lookup' do
+		context 'when orientation name is found' do
+			it 'returns match orientation' do
+				expect(Orientation.lookup('NORTH')).to eq Orientation::NORTH
+			end
+
+			it 'ignores case' do
+				expect(Orientation.lookup('SOUTH')).to eq Orientation.lookup('South')
+			end
+		end
+
+		context 'when orientation name is not found' do
+			it 'returns nil' do
+				expect(Orientation.lookup('something-not-exists')).to be_nil
+			end
+		end
+	end
 end
