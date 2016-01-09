@@ -10,21 +10,6 @@ class GameBoard
 		@grid_height = grid_height
 	end
 
-	def call(command)
-		case command
-			when /^PLACE (\d+),(\d+),(\w+)/i
-				place($1.to_i, $2.to_i, $3)
-			when /^MOVE$/i
-				move
-			when /^LEFT$/i
-				left
-			when /^RIGHT$/i
-				right
-			when /^REPORT$/i
-				report
-		end
-	end
-
 	def place(x, y, orientation_name)
 		orientation = Orientation.lookup(orientation_name)
 
