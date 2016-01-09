@@ -1,3 +1,5 @@
+require_relative 'orientation'
+
 class Robot
 	attr_accessor :x, :y, :orientation
 
@@ -18,6 +20,10 @@ class Robot
 			when Orientation::WEST
 				self.x -= 1
 		end
+	end
+
+	def status
+		[x,y,orientation[:name]].join(',')
 	end
 
 	def rotate(direction)

@@ -62,7 +62,7 @@ describe GameBoard do
 	describe '#move' do
 		context 'when valid move' do
 			it 'moves robot' do
-				game_board.place(0, 0, Orientation::EAST)
+				game_board.place(0, 0, 'EAST')
 				allow(game_board).to receive(:valid_move?).and_return(true)
 
 				expect(game_board.robot).to receive(:move)
@@ -73,7 +73,7 @@ describe GameBoard do
 
 		context 'when invalid move' do
 			it 'does not move robot' do
-				game_board.place(0, 0, Orientation::WEST)
+				game_board.place(0, 0, 'WEST')
 				allow(game_board).to receive(:valid_move?).and_return(false)
 
 				expect(game_board.robot).not_to receive(:move)
@@ -111,7 +111,7 @@ describe GameBoard do
 		context 'when robot is facing north' do
 			context 'and when robot is at the most north' do
 				it 'is not valid' do
-					game_board.place(1, grid_height, Orientation::NORTH)
+					game_board.place(1, grid_height, 'NORTH')
 
 					expect(game_board.valid_move?).to be_falsey
 				end
@@ -119,7 +119,7 @@ describe GameBoard do
 
 			context 'and when robot is not at most north' do
 				it 'is valid' do
-					game_board.place(1, grid_height-1, Orientation::NORTH)
+					game_board.place(1, grid_height-1, 'NORTH')
 
 					expect(game_board.valid_move?).to be_truthy
 				end
@@ -129,7 +129,7 @@ describe GameBoard do
 		context 'when robot is facing south' do
 			context 'and when robot is at the most south' do
 				it 'is not valid' do
-					game_board.place(1, 0, Orientation::SOUTH)
+					game_board.place(1, 0, 'SOUTH')
 
 					expect(game_board.valid_move?).to be_falsey
 				end
@@ -137,7 +137,7 @@ describe GameBoard do
 
 			context 'and when robot is not at most south' do
 				it 'is valid' do
-					game_board.place(1, 1, Orientation::SOUTH)
+					game_board.place(1, 1, 'SOUTH')
 
 					expect(game_board.valid_move?).to be_truthy
 				end
@@ -147,7 +147,7 @@ describe GameBoard do
 		context 'when robot is facing east' do
 			context 'and when robot is at the most east' do
 				it 'is not valid' do
-					game_board.place(grid_width, 1, Orientation::EAST)
+					game_board.place(grid_width, 1, 'EAST')
 
 					expect(game_board.valid_move?).to be_falsey
 				end
@@ -155,7 +155,7 @@ describe GameBoard do
 
 			context 'and when robot is not at most east' do
 				it 'is valid' do
-					game_board.place(grid_width-1, 1, Orientation::EAST)
+					game_board.place(grid_width-1, 1, 'EAST')
 
 					expect(game_board.valid_move?).to be_truthy
 				end
@@ -165,7 +165,7 @@ describe GameBoard do
 		context 'when robot is facing west' do
 			context 'and when robot is at the most west' do
 				it 'is not valid' do
-					game_board.place(0, 1, Orientation::WEST)
+					game_board.place(0, 1, 'WEST')
 
 					expect(game_board.valid_move?).to be_falsey
 				end
@@ -173,7 +173,7 @@ describe GameBoard do
 
 			context 'and when robot is not at most west' do
 				it 'is valid' do
-					game_board.place(1, 1, Orientation::WEST)
+					game_board.place(1, 1, 'WEST')
 
 					expect(game_board.valid_move?).to be_truthy
 				end
@@ -182,7 +182,7 @@ describe GameBoard do
 	end
 
 	describe 'valid_location?' do
-		let(:game_board) {GameBoard.new(2, 2)}
+		let(:game_board) { GameBoard.new(2, 2) }
 
 		context 'when within the grid' do
 			[{x: 0, y: 1}, {x: 1, y: 1}, {x: 1, y: 0}, {x: 0, y: 0}].each do |location|
@@ -198,6 +198,104 @@ describe GameBoard do
 					expect(game_board.valid_location?(location[:x], location[:y])).to be_falsey
 				end
 			end
+		end
+	end
+
+	describe '#call' do
+		context "when input command is 'PLACE 2,3,NORTH'" do
+			it 'places robot' do
+				expect(game_board).to receive(:place).with(2, 3, 'NORTH')
+
+				game_board.call('PLACE 2,3,NORTH')
+			end
+		end
+
+		context "when input command is 'place 5,6,West'" do
+			it 'places robot' do
+				expect(game_board).to receive(:place).with(5, 6, 'West')
+
+				game_board.call('place 5,6,West')
+			end
+		end
+
+		context "when input command is 'place a,b,c'" do
+			it 'places robot' do
+				expect(game_board).not_to receive(:place)
+
+				game_board.call('place a,b,EAST')
+			end
+		end
+
+		context "when input command is 'move'" do
+			it 'moves robot' do
+				expect(game_board).to receive(:move)
+
+				game_board.call('move')
+			end
+		end
+
+		context "when input command is 'MOVE'" do
+			it 'moves robot' do
+				expect(game_board).to receive(:move)
+
+				game_board.call('MOVE')
+			end
+		end
+
+		context "when input command is 'right'" do
+			it 'moves robot' do
+				expect(game_board).to receive(:right)
+
+				game_board.call('right')
+			end
+		end
+
+		context "when input command is 'RIGHT'" do
+			it 'moves robot' do
+				expect(game_board).to receive(:right)
+
+				game_board.call('RIGHT')
+			end
+		end
+
+		context "when input command is 'left'" do
+			it 'moves robot' do
+				expect(game_board).to receive(:left)
+
+				game_board.call('left')
+			end
+		end
+
+		context "when input command is 'LEFT'" do
+			it 'moves robot' do
+				expect(game_board).to receive(:left)
+
+				game_board.call('LEFT')
+			end
+		end
+
+		context "when input command is 'report'" do
+			it 'moves robot' do
+				expect(game_board).to receive(:report)
+
+				game_board.call('report')
+			end
+		end
+
+		context "when input command is 'REPORT'" do
+			it 'moves robot' do
+				expect(game_board).to receive(:report)
+
+				game_board.call('REPORT')
+			end
+		end
+	end
+
+	describe '#report' do
+		it 'returns status of robot' do
+			expect(game_board.robot).to receive(:status)
+
+			game_board.report
 		end
 	end
 end

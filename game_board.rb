@@ -1,3 +1,6 @@
+require_relative 'orientation'
+require_relative 'robot'
+
 class GameBoard
 	attr_reader :robot
 
@@ -5,6 +8,21 @@ class GameBoard
 		@robot = Robot.new
 		@grid_width = grid_with
 		@grid_height = grid_height
+	end
+
+	def call(command)
+		case command
+			when /^PLACE (\d+),(\d+),(\w+)/i
+				place($1.to_i, $2.to_i, $3)
+			when /^MOVE$/i
+				move
+			when /^LEFT$/i
+				left
+			when /^RIGHT$/i
+				right
+			when /^REPORT$/i
+				report
+		end
 	end
 
 	def place(x, y, orientation_name)
@@ -27,6 +45,10 @@ class GameBoard
 
 	def right
 		@robot.rotate(:right)
+	end
+
+	def report
+		puts @robot.status
 	end
 
 	def valid_move?

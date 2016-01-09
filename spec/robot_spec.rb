@@ -96,4 +96,14 @@ describe Robot do
 			expect(robot.orientation).to eq Orientation::WEST
 		end
 	end
+
+	describe '#status' do
+		it 'returns status' do
+			robot.x = 1
+			robot.y = 2
+			robot.orientation = Orientation::EAST
+
+			expect(robot.status).to eq('1,2,EAST')
+		end
+	end
 end
