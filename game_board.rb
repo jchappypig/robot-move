@@ -4,7 +4,7 @@ require_relative 'robot'
 class GameBoard
 	attr_reader :robot
 
-	def initialize(grid_with=5, grid_height=5)
+	def initialize(grid_with, grid_height)
 		@robot = Robot.new
 		@grid_width = grid_with
 		@grid_height = grid_height

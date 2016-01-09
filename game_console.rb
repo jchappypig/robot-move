@@ -3,7 +3,7 @@ require_relative 'game_board'
 class GameConsole
 	attr_reader :game_board
 
-	def initialize(grid_width, grid_height)
+	def initialize(grid_width=5, grid_height=5)
 		@game_board = GameBoard.new(grid_width, grid_height)
 		@grid_width = grid_width
 		@grid_height = grid_height
